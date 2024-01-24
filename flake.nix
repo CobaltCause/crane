@@ -11,6 +11,7 @@
   outputs = { nixpkgs, ... }:
     let
       mkLib = pkgs: import ./lib {
+        inherit pkgs;
         inherit (pkgs) lib newScope;
       };
 

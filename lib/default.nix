@@ -1,4 +1,5 @@
-{ lib
+{ pkgs
+, lib
 , newScope
 }:
 
@@ -31,7 +32,15 @@ in
   cleanCargoToml = callPackage ./cleanCargoToml.nix { };
   configureCargoCommonVarsHook = callPackage ./setupHooks/configureCargoCommonVars.nix { };
   configureCargoVendoredDepsHook = callPackage ./setupHooks/configureCargoVendoredDeps.nix { };
-  craneUtils = callPackage ../pkgs/crane-utils { };
+  craneUtils = pkgs.buildPackages.callPackage ../pkgs/crane-utils {
+    inherit (self)
+      buildDepsOnly
+      cargoClippy
+      cargoFmt
+      cleanCargoSource
+      crateNameFromCargoToml
+      path;
+  };
   devShell = callPackage ./devShell.nix { };
 
   crateNameFromCargoToml = callPackage ./crateNameFromCargoToml.nix {
